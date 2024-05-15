@@ -94,3 +94,21 @@ M_4_predictions_2 <- add_predictions(affairs_df3, M_4, type = 'response')
 ggplot(M_4_predictions_2,
        aes(x = yearsmarried, y = pred)
 ) + geom_point() + geom_line()
+
+
+# odds ratio corresponding to a unit change in yearsmarried is
+exp(estimates[2])
+
+# 95% confidence interval on odds ratio
+exp(confint.default(M_4, parm = 'yearsmarried'))
+
+
+# A multi predictor logistic regression
+M_5 <- glm(had_affair ~ gender + age + yearsmarried + children + religiousness + education +
+             occupation + rating,
+           family = binomial(link = 'logit'),
+           data = affairs_df)
+
+
+summary(M_5)
+exp(confint.default(M_5)) # Confidence intervals on odds ratios
