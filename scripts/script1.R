@@ -179,3 +179,30 @@ plogis(M_8$zeta[2], location = estimates * 600)
 
 # the probability of score = 2 is as follows:
 plogis(M_8$zeta[2], location = estimates * 600) - plogis(M_8$zeta[1], location = estimates * 600)
+
+# area under curve below third threshold in logistic distribution with centre = estimates * 600
+plogis(M_8$zeta[3], location = estimates * 600)
+
+# the probability of score = 3 is as follows:
+plogis(M_8$zeta[3], location = estimates * 600) - plogis(M_8$zeta[2], location = estimates * 600)
+
+# Categorical logistic regression -----------------------------------------
+
+library(nnet)
+
+M_9 <- multinom(score ~ gre.quant, data = admit)
+
+coef(M_9)
+add_predictions(admit_df2, M_9, type = 'prob')
+
+summary(M_9)
+
+# probability of score if gre.quant is 600
+z <- coef(M_9) %*% c(1, 600)
+z <- c(0, z)
+exp(z) / sum(exp(z))
+
+# probability of score if gre.quant is 300
+z <- coef(M_9) %*% c(1, 300)
+z <- c(0, z)
+round(exp(z) / sum(exp(z)), 3)
