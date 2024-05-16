@@ -27,3 +27,28 @@ doctor_df2 <- tibble(age = seq(20, 80))
 predictions1 <- add_predictions(doctor_df2, M_10)
 
 ggplot(predictions1, aes(x = age, y = pred)) + geom_point() + geom_line()
+
+# predicted average number of visits
+predictions2 <- add_predictions(doctor_df2, M_10, type = 'response')
+
+ggplot(predictions2, aes(x = age, y = pred)) + geom_point() + geom_line()
+
+# meaning of coefficient
+exp(estimates[2])
+
+
+deviance(M_10)
+
+M_11 <- glm(doctorco ~ 1, 
+            data = doctor_df, 
+            family = poisson(link = 'log')
+)
+
+deviance(M_11)
+
+M_12 <- glm(doctorco ~ sex + age + income, 
+            data = doctor_df, 
+            family = poisson(link = 'log')
+)
+
+deviance(M_12)
