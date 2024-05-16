@@ -51,4 +51,12 @@ M_12 <- glm(doctorco ~ sex + age + income,
             family = poisson(link = 'log')
 )
 
+llsat <-  sum(dpois(doctor_df$doctorco, lambda = doctor_df$doctorco, log = TRUE))
+
+deviance(M_10)
+-2 * (logLik(M_10) - llsat)
+
 deviance(M_12)
+-2 * (logLik(M_12) - llsat)
+
+anova(M_10, M_12, test = 'Chisq') # log likelihood ratio test
