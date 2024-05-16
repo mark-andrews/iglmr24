@@ -1,4 +1,6 @@
 library(tidyverse)
+library(modelr)
+library(MASS)
 
 doctor_df <- read_csv("https://raw.githubusercontent.com/mark-andrews/iglmr24/main/data/DoctorAUS.csv")
 doctor_df <- mutate(doctor_df, age = age * 100)
@@ -60,3 +62,13 @@ deviance(M_12)
 -2 * (logLik(M_12) - llsat)
 
 anova(M_10, M_12, test = 'Chisq') # log likelihood ratio test
+
+# Negative binomial -------------------------------------------------------
+
+biochem_df <- read_csv("https://raw.githubusercontent.com/mark-andrews/iglmr24/main/data/biochemist.csv")
+
+pubs <- biochem_df$publications
+mean(pubs)
+var(pubs)
+
+M_13 <- glm.nb(publications ~ prestige, data = biochem_df)
