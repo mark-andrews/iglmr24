@@ -112,3 +112,42 @@ M_5 <- glm(had_affair ~ gender + age + yearsmarried + children + religiousness +
 
 summary(M_5)
 exp(confint.default(M_5)) # Confidence intervals on odds ratios
+
+
+# log-likelihood of M_4
+logLik(M_4)
+
+# deviance of M_4
+-2 * logLik(M_4)
+deviance(M_4)
+
+
+# deviance of M_5
+-2 * logLik(M_5)
+deviance(M_5)
+
+# null hypothesis model comparison 
+anova(M_4, M_5, test = 'Chisq')
+
+M_6 <- glm(had_affair ~ 1, data = affairs_df, family = binomial(link = 'logit'))
+deviance(M_6)
+
+anova(M_6, M_4)
+
+
+AIC(M_5)
+deviance(M_5) + 2 * length(coef(M_5))
+
+
+
+# Stepwise regression -----------------------------------------------------
+
+M_5_step <- step(M_5)
+
+
+# AIC after dropping education
+M_7 <- glm(had_affair ~ gender + age + yearsmarried + children + religiousness +
+             occupation + rating,
+           family = binomial(link = 'logit'),
+           data = affairs_df)
+AIC(M_7)
