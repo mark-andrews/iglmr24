@@ -72,3 +72,48 @@ mean(pubs)
 var(pubs)
 
 M_13 <- glm.nb(publications ~ prestige, data = biochem_df)
+
+summary(M_13)
+
+M_14 <- glm(publications ~ prestige, 
+            family = poisson(link = 'log'),
+            data = biochem_df)
+
+summary(M_14)$coefficients
+summary(M_13)$coefficients
+
+estimates <- coef(M_13)
+
+# log avg pubs if prestige = 1
+estimates[1] + estimates[2] * 1
+
+# avg pubs if prestige = 1
+exp(estimates[1] + estimates[2] * 1)
+
+# avg pubs if prestige = 5
+exp(estimates[1] + estimates[2] * 5)
+
+M_15 <- glm.nb(publications ~ gender + married + children + prestige + mentor,
+               data = biochem_df)
+summary(M_15)
+
+M_16 <- glm.nb(publications ~ gender + married + I(children > 0) + prestige + mentor,
+               data = biochem_df)
+summary(M_16)
+
+M_17 <- glm.nb(publications ~ gender + I(children > 0) + mentor,
+               data = biochem_df)
+
+anova(M_17, M_16)
+
+# Zero inflated models ----------------------------------------------------
+
+smoking_df <- read_csv("https://raw.githubusercontent.com/mark-andrews/iglmr24/main/data/smoking.csv")
+
+count(smoking_df, cigs)
+table(smoking_df$cigs)
+
+mean(smoking_df$cigs)
+
+# sample some values from a Poisson with a mean of 8.7
+mean(rpois(n = 1e6, lambda = 8.7) == 0)
