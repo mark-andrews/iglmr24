@@ -166,3 +166,16 @@ summary(M_8)
 admit_df2 <- tibble(gre.quant = seq(300, 800, by = 100))
 
 add_predictions(admit_df2, M_8, type = 'prob')
+
+estimates <- coef(M_8)
+
+estimates * 600
+
+# area under curve below first threshold in logistic distribution with centre = estimates * 600
+plogis(M_8$zeta[1], location = estimates * 600)
+
+# area under curve below second threshold in logistic distribution with centre = estimates * 600
+plogis(M_8$zeta[2], location = estimates * 600)
+
+# the probability of score = 2 is as follows:
+plogis(M_8$zeta[2], location = estimates * 600) - plogis(M_8$zeta[1], location = estimates * 600)
