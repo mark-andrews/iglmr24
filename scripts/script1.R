@@ -159,3 +159,10 @@ library(pscl)
 
 admit <- as_tibble(admit)
 
+M_8 <- polr(score ~ gre.quant, data = admit)
+
+summary(M_8)
+
+admit_df2 <- tibble(gre.quant = seq(300, 800, by = 100))
+
+add_predictions(admit_df2, M_8, type = 'prob')
