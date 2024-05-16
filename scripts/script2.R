@@ -1,6 +1,7 @@
 library(tidyverse)
 library(modelr)
 library(MASS)
+library(pscl)
 
 doctor_df <- read_csv("https://raw.githubusercontent.com/mark-andrews/iglmr24/main/data/DoctorAUS.csv")
 doctor_df <- mutate(doctor_df, age = age * 100)
@@ -117,3 +118,34 @@ mean(smoking_df$cigs)
 
 # sample some values from a Poisson with a mean of 8.7
 mean(rpois(n = 1e6, lambda = 8.7) == 0)
+
+# sample some values from a Poisson with a mean of 0.1
+mean(rpois(n = 1e6, lambda = 0.1) == 0)
+
+# 
+M_18 <- glm(cigs ~ educ, data = smoking_df, family = poisson(link = 'log'))
+
+summary(M_18)
+
+M_19 <- zeroinfl(cigs ~ educ, data = smoking_df)
+
+summary(M_19)
+
+
+estimates_zero <- coef(M_19, model = 'zero')
+
+# probability of being a nonsmoker if education = 10
+plogis(estimates_zero[1] + estimates_zero[2] * 10)
+
+# probability of being a nonsmoker if education = 20
+plogis(estimates_zero[1] + estimates_zero[2] * 20)
+
+
+estimates_count <- coef(M_19, model = 'count')
+
+# avg number of cigs smoked if education = 10
+exp(estimates_count[1] + estimates_count[2] * 10)
+# if educ = 20
+exp(estimates_count[1] + estimates_count[2] * 20)
+
+smoking_df2 <- tibble(educ = seq(5, 20))
