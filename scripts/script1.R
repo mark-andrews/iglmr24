@@ -151,3 +151,11 @@ M_7 <- glm(had_affair ~ gender + age + yearsmarried + children + religiousness +
            family = binomial(link = 'logit'),
            data = affairs_df)
 AIC(M_7)
+
+# Ordinal logistic regression ---------------------------------------------
+
+library(MASS)
+library(pscl)
+
+admit <- as_tibble(admit)
+
